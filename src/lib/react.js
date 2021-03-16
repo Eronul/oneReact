@@ -1,3 +1,5 @@
+import ReactDOM from './react-dom.js';
+
 function createElement(tag, attrs, ...children) {   //通过这个函数把 JSX变成虚拟DOM
     return {
         tag,
@@ -9,14 +11,17 @@ function createElement(tag, attrs, ...children) {   //通过这个函数把 JSX�
 class Component {
     constructor(props) {
         this.props = props;
-        this.states = {};
+        this.state = {};
     
     }
 
     setState(newState) {
-        Object.assign(this.states, newState);
+        Object.assign(this.state, newState);
+        console.log('666')
+        ReactDOM.renderComponent(this)
     }
 }
+
 const React = {
     createElement,
     Component

@@ -28,6 +28,7 @@ function createDomfromVdom(vdom) {
           let component = new vdom.tag(vdom.attrs);
           let vnode = component.render();
           node = createDomfromVdom(vnode);
+          component.$root = node;
       } else {
           node = document.createElement(vdom.tag);
           setAttribute(node, vdom.attrs);
@@ -37,15 +38,25 @@ function createDomfromVdom(vdom) {
     return node;
 }
 
-function createComponent(constructor, attrs) {
-    return new constructor(attrs);
+function renderComponent(component) {
+  let vdom = component.render();
+  let node = createDomfromVdom(vdom);
+  if(component.$root) {
+    component.$root.parentNode.replaceChild(node, component.$root);
+  }
+  console.log('render')
 }
+
+// function createComponent(constructor, attrs) {
+//     return new constructor(attrs);
+// }
 
 const ReactDOM = {
     render(vdom, container) {
     container.innerHTML = '';
     render(vdom, container);
-    }
+    },
+    renderComponent
    };
 
 
