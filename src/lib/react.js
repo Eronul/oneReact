@@ -1,4 +1,4 @@
-import ReactDOM from './react-dom.js';
+import { renderComponent } from './react-dom.js';
 
 function createElement(tag, attrs, ...children) {   //通过这个函数把 JSX变成虚拟DOM
     return {
@@ -18,14 +18,17 @@ class Component {
     setState(newState) {
         Object.assign(this.state, newState);
         console.log('666')
-        ReactDOM.renderComponent(this)
+        renderComponent(this);
     }
 }
 
-const React = {
+export {
     createElement,
     Component
 };
 
 
-export default React;
+export default {
+    createElement,
+    Component
+};

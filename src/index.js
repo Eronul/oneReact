@@ -1,13 +1,19 @@
-import React from './lib/react.js';
+import React, { Component} from './lib/react.js';
 import ReactDOM from './lib/react-dom.js';
 
-class Menu extends React.Component {
-    render() {
-        return <h1> menu { this.props.title } </h1>;
-    }
+// class Menu extends React.Component {
+//     render() {
+//         return <h1> menu { this.props.title } </h1>;
+//     }
+// }
+
+function Menu(props) {
+    return <h1> menu {props.title} </h1>;
 }
 
-class App extends React.Component {
+
+
+class App extends Component {
     
     constructor(props) {
         super(props);

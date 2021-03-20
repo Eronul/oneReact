@@ -1,3 +1,6 @@
+import React from './react.js';
+
+
 function setAttribute(node, attrs) {   // 这个函数是渲染属性
     if(!attrs) return;
       for(let key in attrs) {
@@ -11,7 +14,7 @@ function setAttribute(node, attrs) {   // 这个函数是渲染属性
     }
    }
 
-function render(vdom, container) {    //这里只处理了标签h1,span等，没有处理属性
+function renderVdom(vdom, container) {    //这里只处理了标签h1,span等，没有处理属性
     let node = createDomfromVdom(vdom);
     container.appendChild(node);
 }
@@ -25,17 +28,31 @@ function createDomfromVdom(vdom) {
 
     if(typeof vdom === 'object') {
       if(typeof vdom.tag === 'function') {
-          let component = new vdom.tag(vdom.attrs);
+          // let component = new vdom.tag(vdom.attrs);
+          let component = getComponent(vdom.tag, vdom.attrs)
           let vnode = component.render();
           node = createDomfromVdom(vnode);
           component.$root = node;
       } else {
           node = document.createElement(vdom.tag);
           setAttribute(node, vdom.attrs);
-          vdom.children.forEach(childVdom => render(childVdom, node));
+          vdom.children.forEach(childVdom => renderVdom(childVdom, node));
         }
     }
     return node;
+}
+
+function getComponent(constructor, attrs) {
+  if(constructor.prototype instanceof React.Component) {
+    return new constructor(attrs);
+  } else {
+    let App = class extends React.Component{}
+    App.prototype.render = function() {
+      return constructor(attrs)
+    }
+
+    return new App(attrs)
+  }
 }
 
 function renderComponent(component) {
@@ -51,13 +68,25 @@ function renderComponent(component) {
 //     return new constructor(attrs);
 // }
 
-const ReactDOM = {
-    render(vdom, container) {
-    container.innerHTML = '';
-    render(vdom, container);
-    },
-    renderComponent
-   };
+function render(vdom, container) {
+  container.innerHTML = '';
+  renderVdom(vdom, container);
+}
 
+// const ReactDOM = {
+//     render(vdom, container) {
+//     container.innerHTML = '';
+//     render(vdom, container);
+//     },
+//     renderComponent
+//    };
 
-export default ReactDOM;
+export {
+  render,
+  renderComponent
+};
+
+export default {
+  render,
+  renderComponent
+};
